@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,21 +16,20 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    // List users
+    Route::get('users', [UserController::class, 'index']);
+
+    // List single user
+    Route::get('user/{id}', [UserController::class, 'show']);
+
+    // Create new user;
+    Route::post('user', [UserController::class, 'store']);
+
+    // Update user
+    Route::put('user', [UserController::class, 'store']);
+
+    // Delete user
+    Route::delete('user/{id}', [UserController::class, 'destroy']);
 });
-
-// List users
-Route::get('users', [UserController::class, 'index']);
-
-// List single user
-Route::get('user/{id}', [UserController::class, 'show']);
-
-// Create new user;
-Route::post('user', [UserController::class, 'store']);
-
-// Update user
-Route::put('user', [UserController::class, 'store']);
-
-// Delete user
-Route::delete('user/{id}', [UserController::class, 'destroy']);
