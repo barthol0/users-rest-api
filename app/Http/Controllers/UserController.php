@@ -27,15 +27,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->isMethod('put') ? User::findOrFail($request->id) : new User;
-        $user->id = $request->input('id');
+        $userId = User::where('Email', $request->input('email'))->first()->id;
+        $user = $request->isMethod('put') ? User::findOrFail($userId) : new User;
+
         $user->Firstname = $request->input('firstname');
         $user->Surname = $request->input('surname');
         $user->DateOfBirth = $request->input('date_of_birth');
         $user->PhoneNumber = $request->input('phone_number');
         $user->Email = $request->input('email');
 
-        if($user->save()) {
+        if ($user->save()) {
             return new UserResource($user);
         }
     }
@@ -62,8 +63,14 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if($user->delete()) {
+        if ($user->delete()) {
             return new UserResource($user);
         }
+    }
+
+
+    public function login(Request $request)
+    {
+        return response()->json('Unauthorized.', 401);
     }
 }
